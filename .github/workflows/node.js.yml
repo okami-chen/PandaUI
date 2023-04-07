@@ -50,4 +50,4 @@ jobs:
         push: true
         file: Dockerfile
         tags: |
-          registry.cn-hangzhou.aliyuncs.com/okami/docker-php:ms-panda-x
+          registry.cn-hangzhou.aliyuncs.com/okami/docker-php:ms-panda-ui
