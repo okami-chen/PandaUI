@@ -9,12 +9,12 @@ export default {
 		two4: '友情链接',
 	},
 	copyright: {
-		one5: '版权所有：山东xxx软件科技有限公司 备案号： 鲁ICP备20000271号-1',
-		two6: 'Copyright: ShanDong XXX Software Technology 鲁ICP备05010000号',
+		one5: '版权所有：131.im 备案号： 皖ICP备16016374号',
+		two6: 'Copyright: 皖ICP备16016374号',
 	},
 	account: {
-		accountPlaceholder1: '用户名 admin 或不输均为 test',
-		accountPlaceholder2: '密码：123456',
+		accountPlaceholder1: '用户名 admin',
+		accountPlaceholder2: '密码：admin',
 		accountPlaceholder3: '请输入验证码',
 		accountBtnText: '登 录',
 	},
