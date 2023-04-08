@@ -1,7 +1,6 @@
 <template>
 	<div class="layout-footer mt15" v-show="isDelayFooter">
 		<div class="layout-footer-warp">
-			<div>PandaUi，Made by Panda with ❤️</div>
 			<div class="mt5">{{ $t('message.copyright.one5') }}</div>
 		</div>
 	</div>
