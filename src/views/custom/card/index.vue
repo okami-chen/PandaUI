@@ -16,29 +16,6 @@
            @keyup.enter.native="handleQuery"
         />
      </el-form-item>
-     <el-form-item label="过期时间" prop="expireAt">
-       <el-date-picker clearable style="width: 200px"
-             v-model="state.queryParams.expireAt"
-             type="datetime"
-             placeholder="选择过期时间">
-       </el-date-picker>
-     </el-form-item>
-    <el-form-item label="识别码" prop="code">
-        <el-input
-           v-model="state.queryParams.code"
-           placeholder="请输入识别码"
-           clearable
-           @keyup.enter.native="handleQuery"
-        />
-     </el-form-item>
-    <el-form-item label="组织" prop="organize">
-        <el-input
-           v-model="state.queryParams.organize"
-           placeholder="请输入组织"
-           clearable
-           @keyup.enter.native="handleQuery"
-        />
-     </el-form-item>
     <el-form-item label="持卡" prop="name">
         <el-input
            v-model="state.queryParams.name"
@@ -93,7 +70,20 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="银行" align="center" prop="bank" >
+        <template #default="scope">
+            <el-tag disable-transitions>{{ bankFormat(scope.row) || '-- --' }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="组织" align="center" prop="organize" >
+          <template #default="scope">
+              <el-tag :type="scope.row.organize === '0' ? 'success': 'warning'" disable-transitions>{{ organizeFormat(scope.row) || '-- --' }}</el-tag>
+          </template>
+      </el-table-column>
+      <el-table-column label="持卡" align="center" prop="name" />
       <el-table-column label="名称" align="center" prop="title" />
+      <el-table-column label="卡号" align="center" prop="cardNo" />
       <el-table-column label="过期时间" align="center" prop="expireAt" width="180">
         <template #default="scope">
              <span>{{ dateStrFormat(scope.row.expireAt) }}</span>
@@ -101,20 +91,12 @@
       </el-table-column>
       <el-table-column label="识别码" align="center" prop="code" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="CreateTime" align="center" prop="createTime" width="180">
+      <!--el-table-column label="创建日期" align="center" prop="createTime" width="180">
         <template #default="scope">
              <span>{{ dateStrFormat(scope.row.createTime) }}</span>
         </template>
-      </el-table-column>
-      <el-table-column label="银行" align="center" prop="bank" />
-      <el-table-column label="组织" align="center" prop="organize" >
-      <template #default="scope">
-          <el-tag :type="scope.row.organize === '0' ? 'success': 'warning'" disable-transitions>{{ organizeFormat(scope.row) || '-- --' }}</el-tag>
-      </template>
-      </el-table-column>
-      <el-table-column label="持卡" align="center" prop="name" />
-      <el-table-column label="编号" align="center" prop="id" />
-      <el-table-column label="卡号" align="center" prop="cardNo" />
+      </el-table-column-->
+
       <el-table-column
         label="操作"
         align="center"
@@ -190,22 +172,24 @@ const state = reactive({
   total: 0,
   // organizeOptions字典数据
   organizeOptions: [],
+  bankOptions: [],
   // 查询参数
   queryParams: {
     // 页码
     pageNum: 1,
     // 每页大小
-    pageSize: 10,
+    pageSize: 15,
     // 以下为参数
+    id: undefined,
+    bank: undefined,
+    organize: undefined,
     title: undefined,
+    name: undefined,
+    cardNo: undefined,
     expireAt: undefined,
     deleteTime: undefined,
     code: undefined,
-    bank: undefined,
-    organize: undefined,
-    name: undefined,
-    id: undefined,
-    cardNo: undefined,
+
   },
 });
 
@@ -242,6 +226,10 @@ const handleSizeChange = (val:number) => {
 }
 const organizeFormat = (row: any) => {
    return proxy.selectDictLabel(state.organizeOptions, row.organize);
+};
+
+const bankFormat = (row: any) => {
+    return proxy.selectDictLabel(state.bankOptions, row.bank);
 };
 
 // 打开新增弹窗
@@ -282,9 +270,11 @@ onMounted(() => {
   // 查询岗位信息
   handleQuery();
   proxy.getDicts("bank").then((response: any) => {
+      state.bankOptions = response.data;
+  });
+  proxy.getDicts("organize").then((response: any) => {
       state.organizeOptions = response.data;
   });
-
   proxy.mittBus.on("onEditCardModule", (res: any) => {
     handleQuery();
   });
