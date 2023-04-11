@@ -266,7 +266,7 @@ const state = reactive({
   // 查询参数
   queryParams: {
     pageNo: 1,
-    pageSize: 10,
+    pageSize: 15,
     title: undefined,
     operName: undefined,
     businessType: undefined,

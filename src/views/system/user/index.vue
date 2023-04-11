@@ -281,7 +281,7 @@ const state: any = reactive({
   // 查询参数
   queryParams: {
     pageNum: 1,
-    pageSize: 10,
+    pageSize: 15,
     username: undefined,
     phone: undefined,
     status: undefined,

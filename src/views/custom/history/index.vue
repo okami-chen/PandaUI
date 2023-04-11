@@ -8,37 +8,6 @@
       :inline="true"
       label-width="68px"
     >
-    <el-form-item label="名称" prop="title">
-        <el-input
-           v-model="state.queryParams.title"
-           placeholder="请输入名称"
-           clearable
-           @keyup.enter.native="handleQuery"
-        />
-     </el-form-item>
-     <el-form-item label="过期时间" prop="expireAt">
-       <el-date-picker clearable style="width: 200px"
-             v-model="state.queryParams.expireAt"
-             type="datetime"
-             placeholder="选择过期时间">
-       </el-date-picker>
-     </el-form-item>
-    <el-form-item label="识别码" prop="code">
-        <el-input
-           v-model="state.queryParams.code"
-           placeholder="请输入识别码"
-           clearable
-           @keyup.enter.native="handleQuery"
-        />
-     </el-form-item>
-    <el-form-item label="组织" prop="organize">
-        <el-input
-           v-model="state.queryParams.organize"
-           placeholder="请输入组织"
-           clearable
-           @keyup.enter.native="handleQuery"
-        />
-     </el-form-item>
     <el-form-item label="持卡" prop="name">
         <el-input
            v-model="state.queryParams.name"
@@ -51,6 +20,14 @@
         <el-input
            v-model="state.queryParams.cardNo"
            placeholder="请输入卡号"
+           clearable
+           @keyup.enter.native="handleQuery"
+        />
+     </el-form-item>
+    <el-form-item label="名称" prop="title">
+        <el-input
+           v-model="state.queryParams.title"
+           placeholder="请输入名称"
            clearable
            @keyup.enter.native="handleQuery"
         />
@@ -68,18 +45,18 @@
     <el-card class="box-card">
         <template #header>
            <div class="card-header">
-             <span class="card-header-text">Card列表</span>
+             <span class="card-header-text">CardHistory列表</span>
              <div>
                <el-button
                   type="primary"
                   plain
-                  v-auth="'suctom:card:add'"
+                  v-auth="'custom:history:add'"
                   @click="onOpenAddModule"
                   ><SvgIcon name="elementPlus" />新增</el-button>
                <el-button
                  type="danger"
                  plain
-                 v-auth="'suctom:card:delete'"
+                 v-auth="'custom:history:delete'"
                  :disabled="state.multiple"
                  @click="onTabelRowDel"
                  ><SvgIcon name="elementDelete" />删除</el-button>
@@ -93,28 +70,27 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="银行" align="center" prop="bank" >
+          <template #default="scope">
+              <el-tag disable-transitions>{{ bankFormat(scope.row) || '-- --' }}</el-tag>
+          </template>
+      </el-table-column>
+      <el-table-column label="组织" align="center" prop="organize" >
+          <template #default="scope">
+              <el-tag :type="scope.row.organize === '0' ? 'success': 'warning'" disable-transitions>{{ organizeFormat(scope.row) || '-- --' }}</el-tag>
+          </template>
+      </el-table-column>
+      <el-table-column label="持卡" align="center" prop="name" />
       <el-table-column label="名称" align="center" prop="title" />
+      <el-table-column label="卡号" align="center" prop="cardNo" />
       <el-table-column label="过期时间" align="center" prop="expireAt" width="180">
-        <template #default="scope">
-             <span>{{ dateStrFormat(scope.row.expireAt) }}</span>
-        </template>
+          <template #default="scope">
+              <span>{{ dateStrFormat(scope.row.expireAt) }}</span>
+          </template>
       </el-table-column>
       <el-table-column label="识别码" align="center" prop="code" />
       <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="CreateTime" align="center" prop="createTime" width="180">
-        <template #default="scope">
-             <span>{{ dateStrFormat(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="银行" align="center" prop="bank" />
-      <el-table-column label="组织" align="center" prop="organize" >
-      <template #default="scope">
-          <el-tag :type="scope.row.organize === '0' ? 'success': 'warning'" disable-transitions>{{ organizeFormat(scope.row) || '-- --' }}</el-tag>
-      </template>
-      </el-table-column>
-      <el-table-column label="持卡" align="center" prop="name" />
-      <el-table-column label="编号" align="center" prop="id" />
-      <el-table-column label="卡号" align="center" prop="cardNo" />
       <el-table-column
         label="操作"
         align="center"
@@ -126,12 +102,12 @@
               <el-button type="primary" circle ><SvgIcon name="elementStar"/></el-button>
             </template>
             <div>
-              <el-button text type="primary" v-auth="'suctom:card:edit'" @click="onOpenEditModule(scope.row)">
+              <el-button text type="primary" v-auth="'custom:history:edit'" @click="onOpenEditModule(scope.row)">
                 <SvgIcon name="elementEdit" />修改
               </el-button>
             </div>
             <div>
-              <el-button text type="primary" v-auth="'suctom:card:delete'" @click="onTabelRowDel(scope.row)">
+              <el-button text type="primary" v-auth="'custom:history:delete'" @click="onTabelRowDel(scope.row)">
                 <SvgIcon name="elementDelete" />删除
               </el-button>
             </div>
@@ -158,7 +134,7 @@
   </div>
 </template>
 
-<script lang="ts" setup name="Card">
+<script lang="ts" setup name="History">
 import {
   ref,
   toRefs,
@@ -168,7 +144,7 @@ import {
   onUnmounted,
 } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
-import { listCard, delCard } from "@/api/suctom/card";
+import { listHistory, delHistory } from "@/api/custom/history";
 import EditModule from "./component/editModule.vue";
 
 const { proxy } = getCurrentInstance() as any;
@@ -190,29 +166,27 @@ const state = reactive({
   total: 0,
   // organizeOptions字典数据
   organizeOptions: [],
+  // bankOptions字典数据
+  bankOptions: [],
   // 查询参数
   queryParams: {
     // 页码
     pageNum: 1,
     // 每页大小
-    pageSize: 10,
+    pageSize: 15,
     // 以下为参数
-    title: undefined,
-    expireAt: undefined,
-    deleteTime: undefined,
-    code: undefined,
-    bank: undefined,
-    organize: undefined,
     name: undefined,
-    id: undefined,
     cardNo: undefined,
+    cardId: undefined,
+    title: undefined,
+    id: undefined,
   },
 });
 
 /** 查询列表 */
 const handleQuery = () => {
   state.loading = true;
-  listCard(state.queryParams).then((response:any) => {
+  listHistory(state.queryParams).then((response:any) => {
     state.tableData = response.data.data;
     state.total = response.data.total;
     state.loading = false;
@@ -220,15 +194,11 @@ const handleQuery = () => {
 };
 /** 重置按钮操作 */
 const resetQuery = () => {
-   state.queryParams.title = undefined;
-   state.queryParams.expireAt = undefined;
-   state.queryParams.deleteTime = undefined;
-   state.queryParams.code = undefined;
-   state.queryParams.bank = undefined;
-   state.queryParams.organize = undefined;
    state.queryParams.name = undefined;
-   state.queryParams.id = undefined;
+   state.queryParams.cardId = undefined;
    state.queryParams.cardNo = undefined;
+   state.queryParams.title = undefined;
+   state.queryParams.id = undefined;
   handleQuery();
 };
 
@@ -243,15 +213,18 @@ const handleSizeChange = (val:number) => {
 const organizeFormat = (row: any) => {
    return proxy.selectDictLabel(state.organizeOptions, row.organize);
 };
+const bankFormat = (row: any) => {
+   return proxy.selectDictLabel(state.bankOptions, row.bank);
+};
 
 // 打开新增弹窗
 const onOpenAddModule = () => {
-  state.title = "添加Card";
+  state.title = "添加CardHistory";
   editModuleRef.value.openDialog({});
 };
 // 打开编辑弹窗
 const onOpenEditModule = (row: object) => {
-  state.title = "修改Card";
+  state.title = "修改CardHistory";
   editModuleRef.value.openDialog(row);
 };
 /** 删除按钮操作 */
@@ -265,7 +238,7 @@ const onTabelRowDel = (row: any) => {
     cancelButtonText: "取消",
     type: "warning",
   }).then(function () {
-    return delCard(ids).then(() => {
+    return delHistory(ids).then(() => {
       handleQuery();
       ElMessage.success("删除成功");
     });
@@ -281,16 +254,19 @@ const handleSelectionChange = (selection: any) => {
 onMounted(() => {
   // 查询岗位信息
   handleQuery();
-  proxy.getDicts("bank").then((response: any) => {
+  proxy.getDicts("organize").then((response: any) => {
       state.organizeOptions = response.data;
   });
+  proxy.getDicts("bank").then((response: any) => {
+      state.bankOptions = response.data;
+  });
 
-  proxy.mittBus.on("onEditCardModule", (res: any) => {
+  proxy.mittBus.on("onEditHistoryModule", (res: any) => {
     handleQuery();
   });
 });
 // 页面卸载时
 onUnmounted(() => {
-  proxy.mittBus.off("onEditCardModule");
+  proxy.mittBus.off("onEditHistoryModule");
 });
 </script>

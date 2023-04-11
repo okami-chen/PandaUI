@@ -222,7 +222,7 @@ const state = reactive({
     // 页码
     pageNum: 1,
     // 每页大小
-    pageSize: 10,
+    pageSize: 15,
     jobName: undefined,
     jobGroup: undefined,
     status: undefined,

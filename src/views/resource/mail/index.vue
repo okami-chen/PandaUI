@@ -232,7 +232,7 @@ const state: any = reactive({
     // 页码
     pageNum: 1,
     // 每页大小
-    pageSize: 10,
+    pageSize: 15,
     // 以下为参数
     category: undefined,
     status: undefined,

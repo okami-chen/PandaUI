@@ -67,7 +67,7 @@ export default {
 				loading: false,
 				param: {
 					pageNum: 1,
-					pageSize: 10,
+					pageSize: 15,
 				},
 			},
 		});
