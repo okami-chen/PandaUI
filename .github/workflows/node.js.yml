@@ -53,5 +53,5 @@ jobs:
         push: true
         file: Dockerfile
         tags: |
-          registry.cn-hangzhou.aliyuncs.com/okami/docker-php:ms-panda-ui
-          registry.cn-hangzhou.aliyuncs.com/okami/docker-php:ms-panda-ui-${{ steps.date.outputs.today }}
+          registry.cn-hangzhou.aliyuncs.com/okami/micro-go:ms-panda-ui
+          registry.cn-hangzhou.aliyuncs.com/okami/micro-go:ms-panda-ui-${{ steps.date.outputs.today }}
