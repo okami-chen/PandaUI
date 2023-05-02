@@ -22,14 +22,14 @@
         <el-form-item label="应用图片" prop="appImage">
             <el-input v-model="state.ruleForm.appImage" placeholder="请输入应用图片" />
         </el-form-item>
-        <el-form-item label="应用描述" prop="appDescription">
-            <el-input v-model="state.ruleForm.appDescription" placeholder="请输入应用描述" />
-        </el-form-item>
         <el-form-item label="应用链接" prop="appPackage">
             <el-input v-model="state.ruleForm.appPackage" placeholder="请输入应用链接" />
         </el-form-item>
+        <el-form-item label="应用描述" prop="appDescription">
+            <el-input v-model="state.ruleForm.appDescription" type="textarea" placeholder="请输入应用描述" :rows="8"/>
+        </el-form-item>
       <el-form-item label="更新时间" prop="appUpdateTime">
-          <el-date-picker clearable style="width: 230px" disabled="disabled"
+          <el-date-picker clearable style="width: 230px" 
                  v-model="state.ruleForm.appUpdateTime"
                  type="datetime"
                  placeholder="选择更新时间">
