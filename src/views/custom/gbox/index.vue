@@ -57,11 +57,11 @@
       <el-table-column label="自动编号" align="center" prop="id" />
       <el-table-column label="应用名称" align="center" prop="appName" />
       <el-table-column label="应用版本" align="center" prop="appVersion" />
-      <el-table-column label="应用类型" align="center" prop="appType" >
-          <template #default="scope">
-              <span>{{ appTypeFormat(scope.row.appType) }}</span>
-          </template>
-      </el-table-column>
+<!--      <el-table-column label="应用类型" align="center" prop="appType" >-->
+<!--          <template #default="scope">-->
+<!--              <span>{{ appTypeFormat(scope.row.appType) }}</span>-->
+<!--          </template>-->
+<!--      </el-table-column>-->
       <el-table-column label="更新时间" align="center" prop="appUpdateTime" width="180">
           <template #default="scope">
               <span>{{ dateStrFormat(scope.row.appUpdateTime) }}</span>
