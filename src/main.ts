@@ -8,6 +8,7 @@ import other from '@/utils/other';
 import {addDateRange,parseTime,handleTree,selectDictLabel,download} from '@/utils'
 import { getDicts } from "@/api/system/dict/data"
 import { dateStrFormat } from "@/utils/formatTime"
+import { dateCustomFormat } from "@/utils/formatTime"
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import '@/theme/index.scss';

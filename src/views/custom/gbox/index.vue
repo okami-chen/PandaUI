@@ -64,7 +64,7 @@
 <!--      </el-table-column>-->
       <el-table-column label="更新时间" align="center" prop="appUpdateTime" width="180">
           <template #default="scope">
-              <span>{{ dateFormat("MM-dd HH:mm",scope.row.appUpdateTime) }}</span>
+              <span>{{ dateCustomFormat(scope.row.appUpdateTime) }}</span>
           </template>
       </el-table-column>
       <el-table-column
@@ -122,7 +122,7 @@ import {
 import { ElMessageBox, ElMessage } from "element-plus";
 import { listGbox, delGbox } from "@/api/custom/gbox";
 import EditModule from "./component/editModule.vue";
-import {dateFormat} from "@/utils/formatTime";
+import {dateCustomFormat} from "@/utils/formatTime";
 
 const { proxy } = getCurrentInstance() as any;
 const editModuleRef = ref();
