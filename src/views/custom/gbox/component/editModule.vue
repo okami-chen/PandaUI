@@ -29,7 +29,7 @@
             <el-input v-model="state.ruleForm.appDescription" type="textarea" placeholder="请输入应用描述" :rows="8"/>
         </el-form-item>
       <el-form-item label="更新时间" prop="appUpdateTime">
-          <el-date-picker clearable style="width: 230px" 
+          <el-date-picker clearable style="width: 230px"
                  v-model="state.ruleForm.appUpdateTime"
                  type="datetime"
                  placeholder="选择更新时间">

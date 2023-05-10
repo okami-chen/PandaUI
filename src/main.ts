@@ -16,8 +16,8 @@ import screenShort from 'vue-web-screen-shot';
 // @ts-ignore
 import VueGridLayout from 'vue-grid-layout';
 // @ts-ignore
-import XmForm from 'xmgo-vform'
-import 'xmgo-vform/dist/designer.style.css'  //引入XmForm样式
+import XmForm from 'pandax-form'
+import 'pandax-form/dist/designer.style.css'  //引入XmForm样式
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -26,17 +26,14 @@ directive(app);
 other.elSvg(app);
 
 app
-    .use(pinia)
+	.use(pinia)
 	.use(router)
-	.use(ElementPlus, { i18n: i18n.global.t, size: "default" })
+	.use(ElementPlus)
 	.use(XmForm)
 	.use(i18n)
 	.use(screenShort, { enableWebRtc: false })
     .use(VueGridLayout)
 	.mount('#app');
-
-
-app.config.globalProperties.mittBus = mitt();
 
 // 全局方法挂载
 app.config.globalProperties.getDicts = getDicts
