@@ -8,22 +8,32 @@
       :inline="true"
       label-width="68px"
     >
-    <el-form-item label="应用名称" prop="appName">
+      <el-form-item label="应用名称" prop="appName">
         <el-input
            v-model="state.queryParams.appName"
            placeholder="请输入应用名称"
            clearable
            @keyup.enter.native="handleQuery"
         />
-     </el-form-item>
-     <el-form-item>
+      </el-form-item>
+      <el-form-item label="状态" prop="isEnable">
+          <el-select v-model="state.queryParams.isEnable" placeholder="是否启用" clearable>
+              <el-option
+                      v-for="dict in state.isEnableOptions"
+                      :key="dict.dictValue"
+                      :label="dict.dictLabel"
+                      :value="dict.dictValue"
+              />
+          </el-select>
+      </el-form-item>
+      <el-form-item>
        <el-button type="primary" @click="handleQuery">
          <SvgIcon name="elementSearch" />搜索</el-button>
        <el-button @click="resetQuery">
          <SvgIcon name="elementRefresh" />
          重置
        </el-button>
-     </el-form-item>
+      </el-form-item>
     </el-form>
     </el-card>
     <el-card class="box-card">
@@ -141,6 +151,7 @@ const state = reactive({
   tableData: [],
   // 总条数
   total: 0,
+  isEnableOptions: [],
   // 查询参数
   queryParams: {
     // 页码
@@ -151,6 +162,7 @@ const state = reactive({
     id: undefined,
     appPackage: undefined,
     appName: undefined,
+    isEnable: undefined,
   },
 });
 
@@ -168,6 +180,7 @@ const resetQuery = () => {
    state.queryParams.id = undefined;
    state.queryParams.appPackage = undefined;
    state.queryParams.appName = undefined;
+   state.queryParams.isEnable = undefined;
   handleQuery();
 };
 
@@ -179,7 +192,9 @@ const handleSizeChange = (val:number) => {
   state.queryParams.pageSize = val
   handleQuery()
 }
-
+const isEnableFormat = (row: any) => {
+    return proxy.selectDictLabel(state.isEnableOptions, row.isEnable);
+};
 // 打开新增弹窗
 const onOpenAddModule = () => {
   state.title = "添加Gbox";
@@ -218,6 +233,9 @@ onMounted(() => {
   // 查询岗位信息
   handleQuery();
 
+  proxy.getDicts("sys_yes_no").then((response: any) => {
+      state.isEnableOptions = response.data;
+  });
   proxy.mittBus.on("onEditGboxModule", (res: any) => {
     handleQuery();
   });

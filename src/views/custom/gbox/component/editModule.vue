@@ -10,6 +10,15 @@
         ref="ruleFormRef"
         label-width="80px"
       >
+        <el-form-item label="软件状态" prop="isEnable">
+            <el-select v-model="state.ruleForm.isEnable" placeholder="是否启用">
+                <el-option
+                        v-for="dict in state.isEnableOptions"
+                        :key="dict.dictValue"
+                        :label="dict.dictLabel"
+                >{{ dict.dictLabel }}</el-option>
+            </el-select>
+        </el-form-item>
         <el-form-item label="应用分类" prop="appCateIndex">
             <el-input v-model="state.ruleForm.appCateIndex" placeholder="请输入应用分类" />
         </el-form-item>
@@ -61,20 +70,22 @@ const props = defineProps({
 const { proxy } = getCurrentInstance() as any;
 const ruleFormRef = ref<HTMLElement | null>(null);
 const state = reactive({
-  // 是否显示弹出层
-  isShowDialog: false,
-  loading: false,
-  ruleForm: {
-  appType: "",
-  appUpdateTime: undefined,
-  id: undefined,
-  appImage: "",
-  appDescription: "",
-  appPackage: "",
-  appVersion: "",
-  appCateIndex: undefined,
-  appName: "",
+    // 是否显示弹出层
+    isShowDialog: false,
+    loading: false,
+    ruleForm: {
+    appType: "",
+    appUpdateTime: undefined,
+    id: undefined,
+    appImage: "",
+    appDescription: "",
+    appPackage: "",
+    appVersion: "",
+    appCateIndex: undefined,
+    isEnable: undefined,
+    appName: "",
   },
+  isEnableOptions: [],
   // 表单校验
   ruleRules: {
     appName: [
@@ -88,6 +99,9 @@ const openDialog = (row: any) => {
 
   state.isShowDialog = true;
   state.loading = false;
+  proxy.getDicts("sys_yes_no").then((response: any) => {
+      state.isEnableOptions = response.data;
+  });
 }
 
 // 关闭弹窗
